@@ -1,0 +1,358 @@
+# @app.route("/PostDataMonth", methods=["POST"])
+# def get_Month():
+#     if request.is_json:
+#         json_data = request.get_json()
+
+#         # Variables que se desea formatear
+#         variables = [
+#             "Year",
+#             "Month",
+#         ]
+
+#         for variable in variables:
+#             # Se obtiene el valor de la variable del JSON
+#             valor = json_data.get(variable)
+#             if valor is not None:
+#                 # La variable está presente en el JSON de entrada
+#                 # Se formatea con la sintaxis SQL deseada
+#                 sql_variable = f"@{variable} = '{valor}'"
+#                 # Se agrega la variable al JSON de respuesta
+#                 json_data[variable] = sql_variable
+
+#         SPaEjecutar = "sp_GetMailStatusTotals " + ", ".join(
+#             str(value) if value is not None else "" for value in json_data.values()
+#         )
+
+#         print(SPaEjecutar)
+
+#         cursor1 = cnxn.cursor()
+#         cursor1.execute(SPaEjecutar)
+
+#         rows = cursor1.fetchall()
+
+#         #cnxn.close()
+
+#         if len(rows) > 0:
+#             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+#             result_list = []
+#             for row in rows:
+#                 result_dict = {}
+#                 for index, column in enumerate(cursor1.description):
+#                     column_name = column[0]
+#                     column_value = row[index]
+#                     if isinstance(column_value, datetime):
+#                         # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+#                         column_value = column_value.strftime(
+#                             "%Y-%m-%d %H:%M:%S")
+#                     elif isinstance(column_value, bytes):
+#                         # Convertimos los datos binarios a una cadena de caracteres
+#                         column_value = codecs.decode(column_value, "utf-8")
+#                     result_dict[column_name] = column_value
+#                 result_list.append(result_dict)
+
+#             # output_dict = {"Cantidad": len(rows), "Radicados": result_list}
+
+#             # Convertimos la lista de diccionarios en un objeto JSON
+#             json_output = json.dumps(result_list)
+
+#             return json_output, 200
+#         else:
+#             return (
+#                 jsonify(
+#                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
+#                 404,
+#             )
+#     else:
+#         SPaEjecutar = "sp_GetMailStatusTotals "
+#         print(SPaEjecutar)
+
+#         cursor2 = cnxn.cursor()
+#         cursor2.execute(SPaEjecutar)
+
+#         rows = cursor2.fetchall()
+
+#         #cnxn.close()
+
+#         if len(rows) > 0:
+#             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+#             result_list = []
+#             for row in rows:
+#                 result_dict = {}
+#                 for index, column in enumerate(cursor2.description):
+#                     column_name = column[0]
+#                     column_value = row[index]
+#                     if isinstance(column_value, datetime):
+#                         # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+#                         column_value = column_value.strftime(
+#                             "%Y-%m-%d %H:%M:%S")
+#                     elif isinstance(column_value, bytes):
+#                         # Convertimos los datos binarios a una cadena de caracteres
+#                         column_value = codecs.decode(column_value, "utf-8")
+#                     result_dict[column_name] = column_value
+#                 result_list.append(result_dict)
+
+#             output_dict = {"Totales": result_list}
+
+#             # Convertimos la lista de diccionarios en un objeto JSON
+#             json_output = json.dumps(output_dict)
+
+#             return json_output, 200
+#         else:
+#             return (
+#                 jsonify(
+#                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
+#                 404,
+#             )
+
+
+# @app.route("/PostDataWeek", methods=["POST"])
+# def get_Week():
+#     if request.is_json:
+#         json_data = request.get_json()
+
+#         # Variables que se desea formatear
+#         variables = [
+#             "startDate",
+#             "endDate",
+#         ]
+
+#         for variable in variables:
+#             # Se obtiene el valor de la variable del JSON
+#             valor = json_data.get(variable)
+#             if valor is not None:
+#                 # La variable está presente en el JSON de entrada
+#                 # Se formatea con la sintaxis SQL deseada
+#                 sql_variable = f"@{variable} = '{valor}'"
+#                 # Se agrega la variable al JSON de respuesta
+#                 json_data[variable] = sql_variable
+
+#         SPaEjecutar = "SP_TotalMailsByStatusAndWeek " + ", ".join(
+#             str(value) if value is not None else "" for value in json_data.values()
+#         )
+
+#         print(SPaEjecutar)
+
+#         cursor3 = cnxn.cursor()
+#         cursor3.execute(SPaEjecutar)
+
+#         rows = cursor3.fetchall()
+
+#         #cnxn.close()
+
+#         if len(rows) > 0:
+#             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+#             result_list = []
+#             for row in rows:
+#                 result_dict = {}
+#                 for index, column in enumerate(cursor3.description):
+#                     column_name = column[0]
+#                     column_value = row[index]
+#                     if isinstance(column_value, datetime):
+#                         # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+#                         column_value = column_value.strftime(
+#                             "%Y-%m-%d %H:%M:%S")
+#                     elif isinstance(column_value, bytes):
+#                         # Convertimos los datos binarios a una cadena de caracteres
+#                         column_value = codecs.decode(column_value, "utf-8")
+#                     result_dict[column_name] = column_value
+#                 result_list.append(result_dict)
+
+#             # output_dict = {"Cantidad": len(rows), "Radicados": result_list}
+
+#             # Convertimos la lista de diccionarios en un objeto JSON
+#             json_output = json.dumps(result_list)
+
+#             return json_output, 200
+#         else:
+#             return (
+#                 jsonify(
+#                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
+#                 404,
+#             )
+#     else:
+#         SPaEjecutar = "SP_TotalMailsByStatusAndWeek "
+#         print(SPaEjecutar)
+
+#         cursor4 = cnxn.cursor()
+#         cursor4.execute(SPaEjecutar)
+
+#         rows = cursor4.fetchall()
+
+#         #cnxn.close()
+
+#         if len(rows) > 0:
+#             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+#             result_list = []
+#             for row in rows:
+#                 result_dict = {}
+#                 for index, column in enumerate(cursor4.description):
+#                     column_name = column[0]
+#                     column_value = row[index]
+#                     if isinstance(column_value, datetime):
+#                         # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+#                         column_value = column_value.strftime(
+#                             "%Y-%m-%d %H:%M:%S")
+#                     elif isinstance(column_value, bytes):
+#                         # Convertimos los datos binarios a una cadena de caracteres
+#                         column_value = codecs.decode(column_value, "utf-8")
+#                     result_dict[column_name] = column_value
+#                 result_list.append(result_dict)
+
+#             output_dict = {"Totales": result_list}
+
+#             # Convertimos la lista de diccionarios en un objeto JSON
+#             json_output = json.dumps(output_dict)
+
+#             return json_output, 200
+#         else:
+#             return (
+#                 jsonify(
+#                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
+#                 404,
+#             )
+
+
+# @app.route("/PostDataClass", methods=["POST"])
+# def get_MailClass():
+#     if request.is_json:
+#         json_data = request.get_json()
+
+#         # Variables que se desea formatear
+#         variables = [
+#             "NTop",
+#             "Year",
+#             "Month",
+#         ]
+
+#         for variable in variables:
+#             # Se obtiene el valor de la variable del JSON
+#             valor = json_data.get(variable)
+#             if valor is not None:
+#                 # La variable está presente en el JSON de entrada
+#                 # Se formatea con la sintaxis SQL deseada
+#                 sql_variable = f"@{variable} = '{valor}'"
+#                 # Se agrega la variable al JSON de respuesta
+#                 json_data[variable] = sql_variable
+
+#         SPaEjecutar = "GetTopNClasesCorrespondencia " + ", ".join(
+#             str(value) if value is not None else "" for value in json_data.values()
+#         )
+
+#         print(SPaEjecutar)
+
+#         cursor5 = cnxn.cursor()
+#         cursor5.execute(SPaEjecutar)
+
+#         rows = cursor5.fetchall()
+
+#         #cnxn.close()
+
+#         if len(rows) > 0:
+#             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+#             result_list = []
+#             for row in rows:
+#                 result_dict = {}
+#                 for index, column in enumerate(cursor5.description):
+#                     column_name = column[0]
+#                     column_value = row[index]
+#                     if isinstance(column_value, datetime):
+#                         # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+#                         column_value = column_value.strftime(
+#                             "%Y-%m-%d %H:%M:%S")
+#                     elif isinstance(column_value, bytes):
+#                         # Convertimos los datos binarios a una cadena de caracteres
+#                         column_value = codecs.decode(column_value, "utf-8")
+#                     result_dict[column_name] = column_value
+#                 result_list.append(result_dict)
+
+#             # output_dict = {"Cantidad": len(rows), "Radicados": result_list}
+
+#             # Convertimos la lista de diccionarios en un objeto JSON
+#             json_output = json.dumps(result_list)
+
+#             return json_output, 200
+#         else:
+#             return (
+#                 jsonify(
+#                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
+#                 404,
+#             )
+#     else:
+#         return (
+#             jsonify(
+#                 {"error": "Debe indicar un TOP valido."}),
+#             404,
+#         )
+
+
+# @app.route("/PostDataDependence", methods=["POST"])
+# def get_Dependence():
+#     if request.is_json:
+#         json_data = request.get_json()
+
+#         # Variables que se desea formatear
+#         variables = [
+#             "NTop",
+#             "Year",
+#             "Month",
+#         ]
+
+#         for variable in variables:
+#             # Se obtiene el valor de la variable del JSON
+#             valor = json_data.get(variable)
+#             if valor is not None:
+#                 # La variable está presente en el JSON de entrada
+#                 # Se formatea con la sintaxis SQL deseada
+#                 sql_variable = f"@{variable} = '{valor}'"
+#                 # Se agrega la variable al JSON de respuesta
+#                 json_data[variable] = sql_variable
+
+#         SPaEjecutar = "GetTopNDependenciasWithMonthYear " + ", ".join(
+#             str(value) if value is not None else "" for value in json_data.values()
+#         )
+
+#         print(SPaEjecutar)
+
+#         cursor6 = cnxn.cursor()
+#         cursor6.execute(SPaEjecutar)
+
+#         rows = cursor6.fetchall()
+
+#         #cnxn.close()
+
+#         if len(rows) > 0:
+#             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+#             result_list = []
+#             for row in rows:
+#                 result_dict = {}
+#                 for index, column in enumerate(cursor6.description):
+#                     column_name = column[0]
+#                     column_value = row[index]
+#                     if isinstance(column_value, datetime):
+#                         # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+#                         column_value = column_value.strftime(
+#                             "%Y-%m-%d %H:%M:%S")
+#                     elif isinstance(column_value, bytes):
+#                         # Convertimos los datos binarios a una cadena de caracteres
+#                         column_value = codecs.decode(column_value, "utf-8")
+#                     result_dict[column_name] = column_value
+#                 result_list.append(result_dict)
+
+#             # output_dict = {"Cantidad": len(rows), "Radicados": result_list}
+
+#             # Convertimos la lista de diccionarios en un objeto JSON
+#             json_output = json.dumps(result_list)
+
+#             return json_output, 200
+#         else:
+#             return (
+#                 jsonify(
+#                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
+#                 404,
+#             )
+#     else:
+#         return (
+#             jsonify(
+#                 {"error": "Debe indicar un TOP valido."}),
+#             404,
+#         )

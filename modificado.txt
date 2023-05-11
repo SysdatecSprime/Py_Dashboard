@@ -1,0 +1,419 @@
+import json
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from datetime import datetime
+import codecs
+import configparser
+import threading
+from sqlalchemy.pool import QueuePool
+from sqlalchemy import create_engine
+import db
+import time
+
+# import connexion
+from db import cnxn
+
+connection_lock = threading.Lock()
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+origins = config.get('CORS', 'origins')
+
+app = Flask(__name__)
+
+CORS(app, origins=origins)
+
+result_Dep = []
+result_MailMonTot = []
+result_MailWeeTot = []
+result_MailMailClassTot = []
+
+# 1- Metodos publicos
+
+
+@app.route("/PostDataDependence", methods=["POST"])
+def get_Dependence():
+    # Obtener los datos del JSON
+    json_data = request.get_json()
+
+    # ... Código para formatear los datos y construir el SQL
+
+    # Llamar a la función que ejecuta el hilo
+    result = get_data_Dep_with_thread(json_data)
+
+    # Convertir el resultado en formato JSON
+    # json_output = json.dumps({"Totales": result})
+    json_output = result
+
+    # Retornar el resultado en formato JSON
+    return json_output, 200
+
+@app.route("/PostDataMonth", methods=["POST"])
+def get_Month():
+    # Obtener los datos del JSON
+    json_data = request.get_json()
+
+    # ... Código para formatear los datos y construir el SQL
+
+    # Llamar a la función que ejecuta el hilo
+    result = get_data_month_with_thread(json_data)
+
+    # Convertir el resultado en formato JSON
+    # json_output = json.dumps({"Totales": result})
+    json_output = result
+
+    # Retornar el resultado en formato JSON
+    return json_output, 200
+
+@app.route("/PostDataWeek", methods=["POST"])
+def get_Week():
+    # Obtener los datos del JSON
+    json_data = request.get_json()
+
+    # ... Código para formatear los datos y construir el SQL
+
+    # Llamar a la función que ejecuta el hilo
+    result = get_data_week_with_thread(json_data)
+
+    # Convertir el resultado en formato JSON
+    # json_output = json.dumps({"Totales": result})
+    json_output = result
+
+    # Retornar el resultado en formato JSON
+    return json_output, 200
+
+@app.route("/PostDataClass", methods=["POST"])
+def get_MailClass():
+    # Obtener los datos del JSON
+    json_data = request.get_json()
+
+    # ... Código para formatear los datos y construir el SQL
+
+    # Llamar a la función que ejecuta el hilo
+    result = get_data_class_with_thread(json_data)
+
+    # Convertir el resultado en formato JSON
+    # json_output = json.dumps({"Totales": result})
+    json_output = result
+
+    # Retornar el resultado en formato JSON
+    return json_output, 200
+
+
+# 2- Invocacion de Hilos
+def get_data_Dep_with_thread(json_data):
+    # Crear y ejecutar el hilo
+    thread = threading.Thread(
+        target=execute_sp_get_mail_Dependence_totals(json_data))
+    thread.start()
+
+    # Esperar a que el hilo termine
+    thread.join()
+
+    # Retornar el resultado
+    return result_MailMonTot
+
+def get_data_month_with_thread(json_data):
+    # Crear y ejecutar el hilo
+    thread = threading.Thread(
+        target=execute_sp_get_mail_Month_totals(json_data))
+    thread.start()
+
+    # Esperar a que el hilo termine
+    thread.join()
+
+    # Retornar el resultado
+    return result_Dep
+
+def get_data_week_with_thread(json_data):
+    # Crear y ejecutar el hilo
+    thread = threading.Thread(
+        target=execute_sp_get_mail_Week_totals(json_data))
+    thread.start()
+
+    # Esperar a que el hilo termine
+    thread.join()
+
+    # Retornar el resultado
+    return result_MailWeeTot
+
+def get_data_class_with_thread(json_data):
+    # Crear y ejecutar el hilo
+    thread = threading.Thread(
+        target=execute_sp_get_mail_class_totals(json_data))
+    thread.start()
+
+    # Esperar a que el hilo termine
+    thread.join()
+
+    # Retornar el resultado
+    return result_MailMailClassTot
+
+
+# 3- Generacion de datos desde los SP
+def execute_sp_get_mail_Dependence_totals(json_data):
+    global result_Dep
+    if json_data is not None:
+        # Variables que se desea formatear
+        variables = [
+            "NTop",
+            "Year",
+            "Month",
+        ]
+
+        for variable in variables:
+            # Se obtiene el valor de la variable del JSON
+            valor = json_data.get(variable)
+            if valor is not None:
+                # La variable está presente en el JSON de entrada
+                # Se formatea con la sintaxis SQL deseada
+                sql_variable = f"@{variable} = '{valor}'"
+                # Se agrega la variable al JSON de respuesta
+                json_data[variable] = sql_variable
+
+        SPaEjecutar = "GetTopNDependenciasWithMonthYear " + ", ".join(
+            str(value) if value is not None else "" for value in json_data.values()
+        )
+
+        print(SPaEjecutar)
+
+        time.sleep(1.5)
+
+        cnxn = db.open_conn()
+        cursor1 = cnxn.cursor()
+        
+        cursor1.execute(SPaEjecutar)
+
+        rows = cursor1.fetchall()
+
+        if len(rows) > 0:
+            # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+            result_list = []
+            for row in rows:
+                result_dict = {}
+                for index, column in enumerate(cursor1.description):
+                    column_name = column[0]
+                    column_value = row[index]
+                    if isinstance(column_value, datetime):
+                        # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+                        column_value = column_value.strftime(
+                            "%Y-%m-%d %H:%M:%S")
+                    elif isinstance(column_value, bytes):
+                        # Convertimos los datos binarios a una cadena de caracteres
+                        column_value = codecs.decode(column_value, "utf-8")
+                    result_dict[column_name] = column_value
+                result_list.append(result_dict)
+
+            # Convertimos la lista de diccionarios en un objeto JSON
+            json_output = json.dumps(result_list)
+        else:
+            json_output = jsonify(
+                {"error": "No hay Radicados que coincidan con el criterio de busqueda."}
+            )
+
+        result_Dep = json_output
+
+        cnxn.close()
+
+        return json_output
+
+def execute_sp_get_mail_Month_totals(json_data):
+    global result_Dep
+    if json_data is not None:
+        # Variables que se desea formatear
+        variables = [
+            "Year",
+            "Month",
+        ]
+
+        for variable in variables:
+            # Se obtiene el valor de la variable del JSON
+            valor = json_data.get(variable)
+            if valor is not None:
+                # La variable está presente en el JSON de entrada
+                # Se formatea con la sintaxis SQL deseada
+                sql_variable = f"@{variable} = '{valor}'"
+                # Se agrega la variable al JSON de respuesta
+                json_data[variable] = sql_variable
+
+        SPaEjecutar = "sp_GetMailStatusTotals " + ", ".join(
+            str(value) if value is not None else "" for value in json_data.values()
+        )
+
+        print(SPaEjecutar)
+
+        time.sleep(1.75)
+
+        cnxn = db.open_conn()
+        cursor2 = cnxn.cursor()
+        
+        
+        cursor2.execute(SPaEjecutar)
+
+        rows = cursor2.fetchall()
+
+        if len(rows) > 0:
+            # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+            result_list = []
+            for row in rows:
+                result_dict = {}
+                for index, column in enumerate(cursor2.description):
+                    column_name = column[0]
+                    column_value = row[index]
+                    if isinstance(column_value, datetime):
+                        # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+                        column_value = column_value.strftime(
+                            "%Y-%m-%d %H:%M:%S")
+                    elif isinstance(column_value, bytes):
+                        # Convertimos los datos binarios a una cadena de caracteres
+                        column_value = codecs.decode(column_value, "utf-8")
+                    result_dict[column_name] = column_value
+                result_list.append(result_dict)
+
+            # Convertimos la lista de diccionarios en un objeto JSON
+            json_output = json.dumps(result_list)
+        else:
+            json_output = jsonify(
+                {"error": "No hay Radicados que coincidan con el criterio de busqueda."}
+            )
+
+        result_Dep = json_output
+
+        cnxn.close()
+
+        return json_output
+
+def execute_sp_get_mail_Week_totals(json_data):
+    global result_MailWeeTot
+    if json_data is not None:
+        # Variables que se desea formatear
+        variables = [
+            "startDate",
+            "endDate",
+        ]
+
+        for variable in variables:
+            # Se obtiene el valor de la variable del JSON
+            valor = json_data.get(variable)
+            if valor is not None:
+                # La variable está presente en el JSON de entrada
+                # Se formatea con la sintaxis SQL deseada
+                sql_variable = f"@{variable} = '{valor}'"
+                # Se agrega la variable al JSON de respuesta
+                json_data[variable] = sql_variable
+
+        SPaEjecutar = "SP_TotalMailsByStatusAndWeek " + ", ".join(
+            str(value) if value is not None else "" for value in json_data.values()
+        )
+
+        print(SPaEjecutar)
+
+        time.sleep(2)
+
+        cnxn = db.open_conn()
+        cursor3 = cnxn.cursor()
+        
+        cursor3.execute(SPaEjecutar)
+
+        rows = cursor3.fetchall()
+
+        if len(rows) > 0:
+            # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+            result_list = []
+            for row in rows:
+                result_dict = {}
+                for index, column in enumerate(cursor3.description):
+                    column_name = column[0]
+                    column_value = row[index]
+                    if isinstance(column_value, datetime):
+                        # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+                        column_value = column_value.strftime(
+                            "%Y-%m-%d %H:%M:%S")
+                    elif isinstance(column_value, bytes):
+                        # Convertimos los datos binarios a una cadena de caracteres
+                        column_value = codecs.decode(column_value, "utf-8")
+                    result_dict[column_name] = column_value
+                result_list.append(result_dict)
+
+            # Convertimos la lista de diccionarios en un objeto JSON
+            json_output = json.dumps(result_list)
+        else:
+            json_output = jsonify(
+                {"error": "No hay Radicados que coincidan con el criterio de busqueda."}
+            )
+
+        result_MailWeeTot = json_output
+
+        cnxn.close()
+
+        return json_output
+
+def execute_sp_get_mail_class_totals(json_data):
+    global result_MailMailClassTot
+    if json_data is not None:
+        # Variables que se desea formatear
+        variables = [
+            "NTop",
+            "Year",
+            "Month",
+        ]
+
+        for variable in variables:
+            # Se obtiene el valor de la variable del JSON
+            valor = json_data.get(variable)
+            if valor is not None:
+                # La variable está presente en el JSON de entrada
+                # Se formatea con la sintaxis SQL deseada
+                sql_variable = f"@{variable} = '{valor}'"
+                # Se agrega la variable al JSON de respuesta
+                json_data[variable] = sql_variable
+
+        SPaEjecutar = "GetTopNClasesCorrespondencia " + ", ".join(
+            str(value) if value is not None else "" for value in json_data.values()
+        )
+
+        print(SPaEjecutar)
+
+        time.sleep(1.25)
+
+        cnxn = db.open_conn()
+        cursor4 = cnxn.cursor()
+        
+        cursor4.execute(SPaEjecutar)
+
+        rows = cursor4.fetchall()
+
+        if len(rows) > 0:
+            # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
+            result_list = []
+            for row in rows:
+                result_dict = {}
+                for index, column in enumerate(cursor4.description):
+                    column_name = column[0]
+                    column_value = row[index]
+                    if isinstance(column_value, datetime):
+                        # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
+                        column_value = column_value.strftime(
+                            "%Y-%m-%d %H:%M:%S")
+                    elif isinstance(column_value, bytes):
+                        # Convertimos los datos binarios a una cadena de caracteres
+                        column_value = codecs.decode(column_value, "utf-8")
+                    result_dict[column_name] = column_value
+                result_list.append(result_dict)
+
+            # Convertimos la lista de diccionarios en un objeto JSON
+            json_output = json.dumps(result_list)
+        else:
+            json_output = jsonify(
+                {"error": "No hay Radicados que coincidan con el criterio de busqueda."}
+            )
+
+        result_MailMailClassTot = json_output
+
+        cnxn.close()
+
+        return json_output
+
+if __name__ == "__main__":
+    app.run(port=8786)
