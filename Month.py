@@ -8,7 +8,7 @@ import csv
 import base64
 
 # import connexion
-from db import cnxn
+from db import cnxnmonth
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -68,12 +68,12 @@ def get_Month():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnmonth.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnmonth.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -99,7 +99,7 @@ def get_Month():
             json_output = json.dumps(result_list)
 
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
 
             return json_output, 200
         else:
@@ -112,12 +112,12 @@ def get_Month():
         SPaEjecutar = "sp_GetMailStatusTotals "
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnmonth.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnmonth.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -142,11 +142,11 @@ def get_Month():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
             return json_output, 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -182,12 +182,12 @@ def get_Month_CSV():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnmonth.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnmonth.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -213,7 +213,7 @@ def get_Month_CSV():
             json_output = json.dumps(result_list)
 
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
 
             # print(result_dict)
 
@@ -232,12 +232,12 @@ def get_Month_CSV():
         SPaEjecutar = "sp_GetMailStatusTotals "
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnmonth.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnmonth.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -262,7 +262,7 @@ def get_Month_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
             nombre_archivo = 'ConsultaMes_SF'
             resultado = guardar_en_csv_y_mostrar_base64(
                 result_dict, nombre_archivo)
@@ -270,7 +270,7 @@ def get_Month_CSV():
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -303,12 +303,12 @@ def get_Month_CSV():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnmonth.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnmonth.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -333,7 +333,7 @@ def get_Month_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
             nombre_archivo = 'ConsultaDependencia'
             resultado = guardar_en_csv_y_mostrar_base64(
                 result_dict, nombre_archivo)
@@ -341,7 +341,7 @@ def get_Month_CSV():
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnmonth.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -349,7 +349,7 @@ def get_Month_CSV():
             )
     else:
         # cursor.close()
-        # cnxn.close()
+        # cnxnmonth.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),

@@ -13,4 +13,4 @@ app.register_blueprint(month_app, url_prefix='/Month')
 app.register_blueprint(week_app, url_prefix='/Week')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8890)
+    app.run(debug=True, port=8786)

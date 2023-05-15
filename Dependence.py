@@ -8,7 +8,7 @@ import csv
 import base64
 
 # import connexion
-from db import cnxn
+from db import cnxndep
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -68,12 +68,12 @@ def get_Dependence():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxndep.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxndep.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -98,11 +98,11 @@ def get_Dependence():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxndep.close()
             return json_output, 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxndep.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -110,7 +110,7 @@ def get_Dependence():
             )
     else:
         # cursor.close()
-        # cnxn.close()
+        # cnxndep.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
@@ -146,12 +146,12 @@ def get_Dependence_CSV():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxndep.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxndep.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -176,7 +176,7 @@ def get_Dependence_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxndep.close()
             nombre_archivo = 'ConsultaDependencia'
             resultado = guardar_en_csv_y_mostrar_base64(
                 result_dict, nombre_archivo)
@@ -184,7 +184,7 @@ def get_Dependence_CSV():
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxndep.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -192,7 +192,7 @@ def get_Dependence_CSV():
             )
     else:
         # cursor.close()
-        # cnxn.close()
+        # cnxndep.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),

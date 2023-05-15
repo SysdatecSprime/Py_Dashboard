@@ -8,7 +8,7 @@ import csv
 import base64
 
 # import connexion
-from db import cnxn
+from db import cnxnweek
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -67,12 +67,12 @@ def get_Week():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnweek.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnweek.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -97,11 +97,11 @@ def get_Week():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             return json_output, 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -111,12 +111,12 @@ def get_Week():
         SPaEjecutar = "SP_TotalMailsByStatusAndWeek "
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnweek.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnweek.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -141,11 +141,11 @@ def get_Week():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             return json_output, 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -180,12 +180,12 @@ def get_Week_CSV():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnweek.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnweek.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -210,7 +210,7 @@ def get_Week_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             nombre_archivo = 'ConsultaSemana'
             resultado = guardar_en_csv_y_mostrar_base64(
                 result_dict, nombre_archivo)
@@ -218,7 +218,7 @@ def get_Week_CSV():
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -228,12 +228,12 @@ def get_Week_CSV():
         SPaEjecutar = "SP_TotalMailsByStatusAndWeek "
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnweek.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnweek.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -258,7 +258,7 @@ def get_Week_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             nombre_archivo = 'ConsultaSemana_SF'
             resultado = guardar_en_csv_y_mostrar_base64(
                 result_dict, nombre_archivo)
@@ -266,7 +266,7 @@ def get_Week_CSV():
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnweek.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),

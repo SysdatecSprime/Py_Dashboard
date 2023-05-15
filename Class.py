@@ -8,7 +8,7 @@ import csv
 import base64
 
 # import connexion
-from db import cnxn
+from db import cnxnclass
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -69,12 +69,12 @@ def get_MailClass():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnclass.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnclass.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -99,11 +99,11 @@ def get_MailClass():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxnclass.close()
             return json_output, 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnclass.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -111,7 +111,7 @@ def get_MailClass():
             )
     else:
         # cursor.close()
-        # cnxn.close()
+        # cnxnclass.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
@@ -149,12 +149,12 @@ def get_MailClass_CSV():
 
         print(SPaEjecutar)
 
-        cursor = cnxn.cursor()
+        cursor = cnxnclass.cursor()
         cursor.execute(SPaEjecutar)
 
         rows = cursor.fetchall()
 
-        # cnxn.close()
+        # cnxnclass.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -179,7 +179,7 @@ def get_MailClass_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
             # cursor.close()
-            # cnxn.close()
+            # cnxnclass.close()
             nombre_archivo = 'ConsultaClase'
             resultado = guardar_en_csv_y_mostrar_base64(
                 result_dict, nombre_archivo)
@@ -187,7 +187,7 @@ def get_MailClass_CSV():
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             # cursor.close()
-            # cnxn.close()
+            # cnxnclass.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -195,7 +195,7 @@ def get_MailClass_CSV():
             )
     else:
         # cursor.close()
-        # cnxn.close()
+        # cnxnclass.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
