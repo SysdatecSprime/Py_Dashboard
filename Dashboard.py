@@ -39,7 +39,7 @@ def guardar_en_csv_y_mostrar_base64(json_data, nombre_archivo):
     # Muestra los datos codificados en Base64
     return {'Base64': datos_base64}
 
-##1- metodos originales
+# 1- metodos originales
 
 @app.route("/PostDataMonth", methods=["POST"])
 def get_Month():
@@ -73,7 +73,7 @@ def get_Month():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -98,8 +98,8 @@ def get_Month():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
 
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
 
             return json_output, 200
         else:
@@ -117,7 +117,7 @@ def get_Month():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -141,12 +141,12 @@ def get_Month():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return json_output, 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -186,7 +186,7 @@ def get_Week():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -210,12 +210,12 @@ def get_Week():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return json_output, 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -230,7 +230,7 @@ def get_Week():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -254,12 +254,12 @@ def get_Week():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return json_output, 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -300,7 +300,7 @@ def get_MailClass():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -324,20 +324,20 @@ def get_MailClass():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return json_output, 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
                 404,
             )
     else:
-        #cursor.close()
-        #cnxn.close()
+        # cursor.close()
+        # cnxn.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
@@ -378,7 +378,7 @@ def get_Dependence():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -402,27 +402,28 @@ def get_Dependence():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return json_output, 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
                 404,
             )
     else:
-        #cursor.close()
-        #cnxn.close()
+        # cursor.close()
+        # cnxn.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
             404,
         )
 
-###2- metodos nuevos para csv
+# 2- metodos nuevos para csv
+
 
 @app.route("/PostDataMonth_CSV", methods=["POST"])
 def get_Month_CSV():
@@ -456,7 +457,7 @@ def get_Month_CSV():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -481,15 +482,16 @@ def get_Month_CSV():
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
 
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
 
             # print(result_dict)
 
             nombre_archivo = 'ConsultaMes'
-            resultado = guardar_en_csv_y_mostrar_base64(result_dict, nombre_archivo)
+            resultado = guardar_en_csv_y_mostrar_base64(
+                result_dict, nombre_archivo)
 
-            return jsonify({"Nombre":nombre_archivo, "Archivo":resultado}), 200
+            return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
             return (
                 jsonify(
@@ -505,7 +507,7 @@ def get_Month_CSV():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -529,15 +531,16 @@ def get_Month_CSV():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             nombre_archivo = 'ConsultaMes_SF'
-            resultado = guardar_en_csv_y_mostrar_base64(result_dict, nombre_archivo)
+            resultado = guardar_en_csv_y_mostrar_base64(
+                result_dict, nombre_archivo)
 
-            return jsonify({"Nombre":nombre_archivo, "Archivo":resultado}), 200
+            return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -577,7 +580,7 @@ def get_Week_CSV():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -601,15 +604,16 @@ def get_Week_CSV():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             nombre_archivo = 'ConsultaSemana'
-            resultado = guardar_en_csv_y_mostrar_base64(result_dict, nombre_archivo)
+            resultado = guardar_en_csv_y_mostrar_base64(
+                result_dict, nombre_archivo)
 
-            return jsonify({"Nombre":nombre_archivo, "Archivo":resultado}), 200
+            return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -624,7 +628,7 @@ def get_Week_CSV():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -648,15 +652,16 @@ def get_Week_CSV():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(output_dict)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             nombre_archivo = 'ConsultaSemana_SF'
-            resultado = guardar_en_csv_y_mostrar_base64(result_dict, nombre_archivo)
+            resultado = guardar_en_csv_y_mostrar_base64(
+                result_dict, nombre_archivo)
 
-            return jsonify({"Nombre":nombre_archivo, "Archivo":resultado}), 200
+            return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
@@ -697,7 +702,7 @@ def get_MailClass_CSV():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -721,23 +726,24 @@ def get_MailClass_CSV():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             nombre_archivo = 'ConsultaClase'
-            resultado = guardar_en_csv_y_mostrar_base64(result_dict, nombre_archivo)
+            resultado = guardar_en_csv_y_mostrar_base64(
+                result_dict, nombre_archivo)
 
-            return jsonify({"Nombre":nombre_archivo, "Archivo":resultado}), 200
+            return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
                 404,
             )
     else:
-        #cursor.close()
-        #cnxn.close()
+        # cursor.close()
+        # cnxn.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
@@ -778,7 +784,7 @@ def get_Dependence_CSV():
 
         rows = cursor.fetchall()
 
-        ##cnxn.close()
+        # cnxn.close()
 
         if len(rows) > 0:
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
@@ -802,30 +808,29 @@ def get_Dependence_CSV():
 
             # Convertimos la lista de diccionarios en un objeto JSON
             json_output = json.dumps(result_list)
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             nombre_archivo = 'ConsultaDependencia'
-            resultado = guardar_en_csv_y_mostrar_base64(result_dict, nombre_archivo)
+            resultado = guardar_en_csv_y_mostrar_base64(
+                result_dict, nombre_archivo)
 
-            return jsonify({"Nombre":nombre_archivo, "Archivo":resultado}), 200
+            return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
-            #cursor.close()
-            #cnxn.close()
+            # cursor.close()
+            # cnxn.close()
             return (
                 jsonify(
                     {"error": "No hay Radicados que coincidan con el criterio de busqueda."}),
                 404,
             )
     else:
-        #cursor.close()
-        #cnxn.close()
+        # cursor.close()
+        # cnxn.close()
         return (
             jsonify(
                 {"error": "Debe indicar un TOP valido."}),
             404,
         )
-
-
 
 
 if __name__ == "__main__":
