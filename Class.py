@@ -182,7 +182,7 @@ def get_MailClass_CSV():
             # cnxnclass.close()
             nombre_archivo = 'ConsultaClase'
             resultado = guardar_en_csv_y_mostrar_base64(
-                result_dict, nombre_archivo)
+                result_list, nombre_archivo)
 
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:

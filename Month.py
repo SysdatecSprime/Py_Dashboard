@@ -19,6 +19,7 @@ app = Blueprint('Month', __name__)
 
 CORS(app, origins=origins)
 
+
 def guardar_en_csv_y_mostrar_base64(json_data, nombre_archivo):
     # Convierte el objeto JSON en una lista de listas para que pueda ser escrita en un archivo CSV
     datos_csv = []
@@ -40,6 +41,7 @@ def guardar_en_csv_y_mostrar_base64(json_data, nombre_archivo):
     return {'Base64': datos_base64}
 
 # 1- metodos originales
+
 
 @app.route("/PostDataMonth", methods=["POST"])
 def get_Month():
@@ -155,6 +157,7 @@ def get_Month():
 
 # 2- metodos nuevos para csv
 
+
 @app.route("/PostDataMonth_CSV", methods=["POST"])
 def get_Month_CSV():
     if request.is_json:
@@ -193,16 +196,14 @@ def get_Month_CSV():
             # Creamos una lista de diccionarios donde cada diccionario representa una fila del resultado
             result_list = []
             for row in rows:
-                result_dict = {}
+                result_dict = {}  # Mover la declaración del diccionario aquí
                 for index, column in enumerate(cursor.description):
                     column_name = column[0]
                     column_value = row[index]
                     if isinstance(column_value, datetime):
-                        # Convertimos la fecha en una cadena de texto antes de agregarla al diccionario
                         column_value = column_value.strftime(
                             "%Y-%m-%d %H:%M:%S")
                     elif isinstance(column_value, bytes):
-                        # Convertimos los datos binarios a una cadena de caracteres
                         column_value = codecs.decode(column_value, "utf-8")
                     result_dict[column_name] = column_value
                 result_list.append(result_dict)
@@ -215,11 +216,11 @@ def get_Month_CSV():
             # cursor.close()
             # cnxnmonth.close()
 
-            # print(result_dict)
+            # print(result_list)  # Utilizar result_list en lugar de result_dict
 
             nombre_archivo = 'ConsultaMes'
             resultado = guardar_en_csv_y_mostrar_base64(
-                result_dict, nombre_archivo)
+                result_list, nombre_archivo)
 
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
@@ -265,7 +266,7 @@ def get_Month_CSV():
             # cnxnmonth.close()
             nombre_archivo = 'ConsultaMes_SF'
             resultado = guardar_en_csv_y_mostrar_base64(
-                result_dict, nombre_archivo)
+                result_list, nombre_archivo)
 
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:

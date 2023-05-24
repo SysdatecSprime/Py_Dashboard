@@ -179,7 +179,7 @@ def get_Dependence_CSV():
             # cnxndep.close()
             nombre_archivo = 'ConsultaDependencia'
             resultado = guardar_en_csv_y_mostrar_base64(
-                result_dict, nombre_archivo)
+                result_list, nombre_archivo)
 
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:

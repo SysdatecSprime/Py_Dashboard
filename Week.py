@@ -213,7 +213,7 @@ def get_Week_CSV():
             # cnxnweek.close()
             nombre_archivo = 'ConsultaSemana'
             resultado = guardar_en_csv_y_mostrar_base64(
-                result_dict, nombre_archivo)
+                result_list, nombre_archivo)
 
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
@@ -261,7 +261,7 @@ def get_Week_CSV():
             # cnxnweek.close()
             nombre_archivo = 'ConsultaSemana_SF'
             resultado = guardar_en_csv_y_mostrar_base64(
-                result_dict, nombre_archivo)
+                result_list, nombre_archivo)
 
             return jsonify({"Nombre": nombre_archivo, "Archivo": resultado}), 200
         else:
